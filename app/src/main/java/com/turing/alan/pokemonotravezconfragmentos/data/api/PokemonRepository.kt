@@ -13,7 +13,7 @@ interface  PokemonApi {
     @GET("api/v2/pokemon/{name}/")
     suspend fun fetchPokemon(@Path("name") name:String):PokemonApiModel
 
-    @GET("api/v2/pokemon/?limit=0&offset=20")
+    @GET("api/v2/pokemon")
     suspend fun fetchPokemonList():PokemonListResponse //Luego se podran añadir los parametros
 }
 
