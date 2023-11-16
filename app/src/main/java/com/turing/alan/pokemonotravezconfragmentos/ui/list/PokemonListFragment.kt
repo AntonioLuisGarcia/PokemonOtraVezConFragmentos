@@ -35,10 +35,9 @@ class PokemonListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val observer = Observer<Pokemon> {
-            binding.pokemonIdText.text = it.id.toString()
-            binding.pokemonNameText.text = it.name
+        val adapter = PokemonAdapter()
+        val observer = Observer<List<Pokemon>> { pokemonList ->
+            adapter.submitList(pokemonList)
         }
 
         viewModel.pokemonUi.observe(viewLifecycleOwner,observer)

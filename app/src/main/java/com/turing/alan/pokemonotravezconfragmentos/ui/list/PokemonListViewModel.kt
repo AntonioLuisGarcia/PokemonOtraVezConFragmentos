@@ -6,30 +6,30 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.turing.alan.pokemonotravezconfragmentos.data.api.PokemonApiModel
+import com.turing.alan.pokemonotravezconfragmentos.data.api.PokemonListApiModel
 import com.turing.alan.pokemonotravezconfragmentos.data.api.PokemonRepository
 import com.turing.alan.pokemonotravezconfragmentos.data.model.Pokemon
 import kotlinx.coroutines.launch
 
 class PokemonListViewModel(): ViewModel() {
     private val repository = PokemonRepository.getInstance()
-    private val _pokemonUi = MutableLiveData<Pokemon>()
-    val pokemonUi: LiveData<Pokemon>
+    private val _pokemonUi = MutableLiveData<List<Pokemon>>()
+    val pokemonUi: LiveData<List<Pokemon>>
         get() = _pokemonUi
-    private val observer = Observer<PokemonApiModel> {
-        _pokemonUi.value = Pokemon(it.id, it.name)
+    private val observer = Observer<PokemonListApiModel> {
+
+        _pokemonUi.value = it.pokemonList.map{ p -> Pokemon(p.id, p.name)}
     }
 
     init {
         fetch()
     }
 
-    private fun fetch() {
+    fun fetch() {
         repository.pokemon.observeForever(observer)
         viewModelScope.launch {
             repository.fetch()
         }
-
-
     }
 
     override fun onCleared() {

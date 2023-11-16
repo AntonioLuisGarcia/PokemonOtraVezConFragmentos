@@ -10,10 +10,11 @@ import retrofit2.http.Path
 
 
 interface  PokemonApi {
-    @GET("api/v2/pokemon/{name}/")
-    suspend fun fetchPokemon(@Path("name") name:String):PokemonDetailResponse
-    // TODO Añadir nuevo metodo para leer una lista de pokemon
-    suspend fun fetchAllPokemon():PokemonListResponse
+    @GET("api/v2/pokemon/{id}/")
+    suspend fun fetchPokemon(@Path("id") id:String):PokemonApiModel
+
+    @GET("api/v2/pokemon/?limit=0&offset=20")
+    suspend fun fetchPokemonList():PokemonListResponse //Luego se podran añadir los parametros
 }
 
 
@@ -40,11 +41,39 @@ class PokemonRepository private constructor(private val api:PokemonApi) {
 
     suspend fun fetch() {
         //val pokemonResponse = api.fetchPokemon("1")
-        // TODO Llamar a la api para obtener la lista
-        // TODO Recorrer la respuesta y llamar a la api de detalles
-        // TODO Mapear el resultado a PokemonListApiModel
+        //Log.d("DAVID",pokemonResponse.toString())
         //_pokemon.value = pokemonResponse
+
+        val pokemonListResponse = api.fetchPokemonList()
+
+        var pokemonDetailList = pokemonListResponse.results.map{
+            val detailResponse = api.fetchPokemon(it.name)
+            PokemonApiModel(detailResponse.id,
+                detailResponse.name,
+                detailResponse.weight,
+                detailResponse.height,
+                detailResponse.front)
+        }
+
+        val pokemonListApiModel = PokemonListApiModel(pokemonDetailList)
+        _pokemon.value = pokemonListApiModel //tmb puede ser con pokemonDetailList solo
+
     }
 
+    suspend fun fetchList(){
+        val pokemonListResponse = api.fetchPokemonList()
+
+        var pokemonDetailList = pokemonListResponse.results.map{
+            val detailResponse = api.fetchPokemon(it.name)
+            PokemonApiModel(detailResponse.id,
+                detailResponse.name,
+                detailResponse.weight,
+                detailResponse.height,
+                detailResponse.front)
+        }
+
+        //val pokemonListApiModel = PokemonListApiModel(pokemonDetailList)
+        //_pokemon.value = pokemonListApiModel //tmb puede ser con pokemonDetailList solo
+    }
 
 }
