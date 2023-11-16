@@ -10,8 +10,8 @@ import retrofit2.http.Path
 
 
 interface  PokemonApi {
-    @GET("api/v2/pokemon/{id}/")
-    suspend fun fetchPokemon(@Path("id") id:String):PokemonApiModel
+    @GET("api/v2/pokemon/{name}/")
+    suspend fun fetchPokemon(@Path("name") name:String):PokemonApiModel
 
     @GET("api/v2/pokemon/?limit=0&offset=20")
     suspend fun fetchPokemonList():PokemonListResponse //Luego se podran añadir los parametros
@@ -46,7 +46,23 @@ class PokemonRepository private constructor(private val api:PokemonApi) {
 
         val pokemonListResponse = api.fetchPokemonList()
 
-        var pokemonDetailList = pokemonListResponse.results.map{
+        val listaDePokemonsConLosDetalles = mutableListOf<PokemonApiModel>()
+        pokemonListResponse.results.forEach{p ->
+            val detalleDelPokemon = api.fetchPokemon(p.name)
+            val listadoDePokemon = PokemonApiModel(
+                id = detalleDelPokemon.id,
+                name = detalleDelPokemon.name,
+                weight = detalleDelPokemon.weight,
+                height = detalleDelPokemon.height,
+                front = detalleDelPokemon.front,
+            )
+            listaDePokemonsConLosDetalles.add(listadoDePokemon)
+        }
+
+        val pokemonsParaElBehaviourSubject = PokemonListApiModel(listaDePokemonsConLosDetalles)
+        _pokemon.postValue(pokemonsParaElBehaviourSubject)
+
+        /*var pokemonDetailList = pokemonListResponse.results.map{
             val detailResponse = api.fetchPokemon(it.name)
             PokemonApiModel(detailResponse.id,
                 detailResponse.name,
@@ -57,7 +73,7 @@ class PokemonRepository private constructor(private val api:PokemonApi) {
 
         val pokemonListApiModel = PokemonListApiModel(pokemonDetailList)
         _pokemon.value = pokemonListApiModel //tmb puede ser con pokemonDetailList solo
-
+        */
     }
 
     suspend fun fetchList(){
