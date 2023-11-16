@@ -16,9 +16,10 @@ class PokemonListViewModel(): ViewModel() {
     private val _pokemonUi = MutableLiveData<List<Pokemon>>()
     val pokemonUi: LiveData<List<Pokemon>>
         get() = _pokemonUi
-    private val observer = Observer<PokemonListApiModel> {
-
-        _pokemonUi.value = it.pokemonList.map{ p -> Pokemon(p.id, p.name)}
+    private val observer = Observer<PokemonListApiModel> { cadaPokemon ->
+        _pokemonUi.value = cadaPokemon.pokemonList.map {
+                elPokemonDeLaLista -> Pokemon(elPokemonDeLaLista.id, elPokemonDeLaLista.name)
+        }
     }
 
     init {
