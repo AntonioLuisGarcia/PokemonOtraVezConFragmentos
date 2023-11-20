@@ -16,7 +16,7 @@ import com.turing.alan.pokemonotravezconfragmentos.data.model.Pokemon
 import com.turing.alan.pokemonotravezconfragmentos.databinding.FragmentPokemonDetailBinding
 
 class PokemonDetailFragment : Fragment() {
-    private val args: PokemonDetailFragment by navArgs()
+    private val args: PokemonDetailFragmentArgs by navArgs()
     private val viewModel: PokemonDetailViewModel by viewModels()
     private lateinit var binding: FragmentPokemonDetailBinding
 

@@ -1,6 +1,7 @@
 package com.turing.alan.pokemonotravezconfragmentos.ui.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -9,12 +10,17 @@ import coil.load
 import com.turing.alan.pokemonotravezconfragmentos.data.model.Pokemon
 import com.turing.alan.pokemonotravezconfragmentos.databinding.PokemonItemLayoutBinding
 
-class PokemonAdapter():ListAdapter<Pokemon,PokemonAdapter.PokemonViewHolder>(DIFF_CALLBACK) {
-    class PokemonViewHolder(private val binding: PokemonItemLayoutBinding): RecyclerView.ViewHolder(binding.root) {
+class PokemonAdapter(
+    private val onClick:((View, Pokemon)->Unit)
+):ListAdapter<Pokemon,PokemonAdapter.PokemonViewHolder>(DIFF_CALLBACK) {
+    inner class PokemonViewHolder(private val binding: PokemonItemLayoutBinding): RecyclerView.ViewHolder(binding.root) {
         fun pokemonMostrado(pokemon: Pokemon){
             binding.pokemonIdText.text = pokemon.id.toString()
             binding.pokemonNameText.text = pokemon.name
             binding.imgPokemon.load(pokemon.img)
+            binding.pokemonCard.setOnClickListener {
+                onClick(it,pokemon)
+            }
         }
     }
 

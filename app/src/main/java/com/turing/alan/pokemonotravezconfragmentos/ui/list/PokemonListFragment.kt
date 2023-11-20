@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.findNavController
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.turing.alan.pokemonotravezconfragmentos.data.model.Pokemon
 import com.turing.alan.pokemonotravezconfragmentos.databinding.FragmentPokemonListBinding
@@ -35,12 +36,17 @@ class PokemonListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         progressCircular.visibility = View.VISIBLE
-        val adapter = PokemonAdapter()
+        val adapter = PokemonAdapter(::toDetail)
         binding.pokemonListId.adapter = adapter
 
         viewModel.pokemonUi.observe(viewLifecycleOwner){
             pokemonLis -> adapter.submitList(pokemonLis)
             progressCircular.visibility = View.GONE
         }
+    }
+
+    private fun toDetail(view:View,pokemon:Pokemon){
+        val action = PokemonListFragmentDirections.actionPokemonListFragmentToPokemonDetailFragment(pokemon.name)
+        view.findNavController().navigate(action)
     }
 }
