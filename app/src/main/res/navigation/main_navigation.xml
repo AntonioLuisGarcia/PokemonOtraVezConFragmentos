@@ -18,4 +18,7 @@
         android:name="com.turing.alan.pokemonotravezconfragmentos.ui.detail.PokemonDetailFragment"
         android:label="fragment_pokemon_detail"
         tools:layout="@layout/fragment_pokemon_detail" />
+    <argument
+        android:name="name"
+        app:argType="string" />
 </navigation>
