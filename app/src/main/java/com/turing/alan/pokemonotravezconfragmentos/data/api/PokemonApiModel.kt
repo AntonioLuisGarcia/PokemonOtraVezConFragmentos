@@ -6,4 +6,5 @@ data class PokemonApiModel(
     val weight:Int,
     val height:Int,
     val front:String,
+    val bigFront:String,
 )

@@ -11,7 +11,7 @@ import retrofit2.http.Path
 
 interface  PokemonApi {
     @GET("api/v2/pokemon/{name}/")
-    suspend fun fetchPokemon(@Path("name") name:String):PokemonApiModel
+    suspend fun fetchPokemon(@Path("name") name:String):PokemonDetailResponse
 
     @GET("api/v2/pokemon")
     suspend fun fetchPokemonList():PokemonListResponse //Luego se podran añadir los parametros
@@ -40,9 +40,6 @@ class PokemonRepository private constructor(private val api:PokemonApi) {
     }
 
     suspend fun fetch() {
-        //val pokemonResponse = api.fetchPokemon("1")
-        //Log.d("DAVID",pokemonResponse.toString())
-        //_pokemon.value = pokemonResponse
 
         val pokemonListResponse = api.fetchPokemonList()
 
@@ -54,7 +51,8 @@ class PokemonRepository private constructor(private val api:PokemonApi) {
                 name = detalleDelPokemon.name,
                 weight = detalleDelPokemon.weight,
                 height = detalleDelPokemon.height,
-                front = detalleDelPokemon.front,
+                front = detalleDelPokemon.sprites.front_default,
+                bigFront = detalleDelPokemon.sprites.other.official_artwork.front_default
             )
             listaDePokemonsConLosDetalles.add(listadoDePokemon)
         }
@@ -74,22 +72,6 @@ class PokemonRepository private constructor(private val api:PokemonApi) {
         val pokemonListApiModel = PokemonListApiModel(pokemonDetailList)
         _pokemon.value = pokemonListApiModel //tmb puede ser con pokemonDetailList solo
         */
-    }
-
-    suspend fun fetchList(){
-        val pokemonListResponse = api.fetchPokemonList()
-
-        var pokemonDetailList = pokemonListResponse.results.map{
-            val detailResponse = api.fetchPokemon(it.name)
-            PokemonApiModel(detailResponse.id,
-                detailResponse.name,
-                detailResponse.weight,
-                detailResponse.height,
-                detailResponse.front)
-        }
-
-        //val pokemonListApiModel = PokemonListApiModel(pokemonDetailList)
-        //_pokemon.value = pokemonListApiModel //tmb puede ser con pokemonDetailList solo
     }
 
 }

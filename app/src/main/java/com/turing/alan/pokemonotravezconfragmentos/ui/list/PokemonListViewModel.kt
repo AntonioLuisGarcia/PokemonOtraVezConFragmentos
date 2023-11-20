@@ -18,7 +18,7 @@ class PokemonListViewModel(): ViewModel() {
         get() = _pokemonUi
     private val observer = Observer<PokemonListApiModel> { cadaPokemon ->
         _pokemonUi.value = cadaPokemon.pokemonList.map {
-                elPokemonDeLaLista -> Pokemon(elPokemonDeLaLista.id, elPokemonDeLaLista.name)
+                elPokemonDeLaLista -> Pokemon(elPokemonDeLaLista.id, elPokemonDeLaLista.name, elPokemonDeLaLista.front)
         }
     }
 

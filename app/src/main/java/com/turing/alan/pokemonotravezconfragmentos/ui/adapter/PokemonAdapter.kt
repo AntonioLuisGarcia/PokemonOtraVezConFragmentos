@@ -2,11 +2,10 @@ package com.turing.alan.pokemonotravezconfragmentos.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.view.inputmethod.InputBinding
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.turing.alan.pokemonotravezconfragmentos.data.api.PokemonListItemResponse
+import coil.load
 import com.turing.alan.pokemonotravezconfragmentos.data.model.Pokemon
 import com.turing.alan.pokemonotravezconfragmentos.databinding.PokemonItemLayoutBinding
 
@@ -15,6 +14,7 @@ class PokemonAdapter():ListAdapter<Pokemon,PokemonAdapter.PokemonViewHolder>(DIF
         fun pokemonMostrado(pokemon: Pokemon){
             binding.pokemonIdText.text = pokemon.id.toString()
             binding.pokemonNameText.text = pokemon.name
+            binding.imgPokemon.load(pokemon.img)
         }
     }
 
